@@ -3,6 +3,8 @@ namespace Pires\Boleto;
 
 abstract class Boleto {
 
+    const DIR_TEMPLATE = __DIR__;
+
     /**
      * @var String Código do Banco
      */
