@@ -91,8 +91,8 @@ class BoletoItauTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
-     */
+      * @expectedException InvalidArgumentException
+      */
     public function testGeraBarrasSemConta()
     {
         $boletoItau = new \Pires\Boleto\BoletoItau();

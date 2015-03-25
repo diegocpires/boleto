@@ -206,10 +206,10 @@ abstract class Boleto {
     {
         if (is_null($this->twig)) {
             if(!is_null($container)) {
-                $this->twig = $container->twig;
+                $this->twig = $container->twigboleto;
             } else {
                 $container = new \Respect\Config\Container(CONFIG_DIR . '/config_default.ini');
-                $this->twig = $container->twig;
+                $this->twig = $container->twigboleto;
             }
         }
 
