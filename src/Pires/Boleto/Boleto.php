@@ -208,7 +208,7 @@ abstract class Boleto {
             if(!is_null($container)) {
                 $this->twig = $container->twigboleto;
             } else {
-                $container = new \Respect\Config\Container(CONFIG_DIR . '/config_default.ini');
+                $container = new \Respect\Config\Container(__DIR__.'/config_default.ini');
                 $this->twig = $container->twigboleto;
             }
         }
