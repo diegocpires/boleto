@@ -152,11 +152,11 @@ class BoletoItauTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testImpressao()
-    {
-        $container = new \Respect\Config\Container(CONFIG_DIR.'/tests/config_testes.ini');
-        $boletoItau = new \Pires\Boleto\BoletoItau($container);
-        $boletoItau->geraCodigoBarras();
-        echo $boletoItau->imprimeBoleto();
-    }
+    //public function testImpressao()
+    //{
+    //    $container = new \Respect\Config\Container(CONFIG_DIR.'/tests/config_testes.ini');
+    //    $boletoItau = new \Pires\Boleto\BoletoItau($container);
+    //    $boletoItau->geraCodigoBarras();
+    //    echo $boletoItau->imprimeBoleto();
+    //}
 }
