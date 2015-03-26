@@ -7,10 +7,6 @@ language:
 php:
   - 5.5
 
-cache:
-  directories:
-    - vendor
-
 before_script:
   - composer install --dev --no-interaction --prefer-source
 
