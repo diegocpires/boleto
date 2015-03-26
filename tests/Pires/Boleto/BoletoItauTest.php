@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set("America/Sao_Paulo");
+
 class BoletoItauTest extends PHPUnit_Framework_TestCase
 {
     public function testNumeroBaco()
@@ -135,7 +137,42 @@ class BoletoItauTest extends PHPUnit_Framework_TestCase
 
     public function testCodigoBarras44()
     {
-        $container = new \Respect\Config\Container(CONFIG_DIR.'/tests/config_testes.ini');
+        $ini = <<<INI
+; Directory where templates are
+boletodir = \Pires\Boleto\Boleto::DIR_TEMPLATE
+view_path_boleto           = '[boletodir]/templates/'
+; Twig options (default values)
+[optionsboleto]
+debug               = true
+charset             = 'UTF-8'
+base_template_class = 'Twig_Template'
+strict_variables    = false
+autoescape          = true
+cache               = /tmp
+auto_reload         = null
+; Create a 'Twig_Loader_Filesystem' instance with 'view_path'
+[loaderboleto Twig_Loader_Filesystem]
+paths   = [view_path_boleto]
+; Create a 'Twig_Environment' with the loader and options given
+[twigboleto Twig_Environment]
+loader  = [loaderboleto]
+options = [optionsboleto]
+
+[vencimento DateTime]
+createFromFormat[] = [Y-m-d H:i:s, 2015-03-29 00:00:01]
+
+[valores_padrao stdClass]
+valor_boleto = 2952.95
+carteira = 175
+nosso_numero = 12345678
+agencia = 1565
+conta = 13877
+endereco = 'Rua Itapeva, 490'
+identificacao = 'MWells'
+cpf_cnpj = '12.058.755/0001-26'
+data_vencimento = [vencimento]
+INI;
+        $container = new \Respect\Config\Container(parse_ini_string($ini, true));
         $boletoItau = new \Pires\Boleto\BoletoItau($container);
         $this->assertEquals("34199638200002952951751234567861565138771000", 
             $boletoItau->geraCodigoBarras()->getCodigoBarras44()
@@ -144,7 +181,42 @@ class BoletoItauTest extends PHPUnit_Framework_TestCase
 
     public function testLinhaDigitavel()
     {
-        $container = new \Respect\Config\Container(CONFIG_DIR.'/tests/config_testes.ini');
+        $ini = <<<INI
+; Directory where templates are
+boletodir = \Pires\Boleto\Boleto::DIR_TEMPLATE
+view_path_boleto           = '[boletodir]/templates/'
+; Twig options (default values)
+[optionsboleto]
+debug               = true
+charset             = 'UTF-8'
+base_template_class = 'Twig_Template'
+strict_variables    = false
+autoescape          = true
+cache               = /tmp
+auto_reload         = null
+; Create a 'Twig_Loader_Filesystem' instance with 'view_path'
+[loaderboleto Twig_Loader_Filesystem]
+paths   = [view_path_boleto]
+; Create a 'Twig_Environment' with the loader and options given
+[twigboleto Twig_Environment]
+loader  = [loaderboleto]
+options = [optionsboleto]
+
+[vencimento DateTime]
+createFromFormat[] = [Y-m-d H:i:s, 2015-03-29 00:00:01]
+
+[valores_padrao stdClass]
+valor_boleto = 2952.95
+carteira = 175
+nosso_numero = 12345678
+agencia = 1565
+conta = 13877
+endereco = 'Rua Itapeva, 490'
+identificacao = 'MWells'
+cpf_cnpj = '12.058.755/0001-26'
+data_vencimento = [vencimento]
+INI;
+        $container = new \Respect\Config\Container(parse_ini_string($ini, true));
         $boletoItau = new \Pires\Boleto\BoletoItau($container);
         $boletoItau->geraCodigoBarras();
         $this->assertEquals("34191.75124 34567.861561 51387.710000 9 63820000295295", 
