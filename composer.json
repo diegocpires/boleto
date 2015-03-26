@@ -19,7 +19,7 @@
     "homepage": "http://diegopires.net/",
     "require": {
         "php": ">=5.3.0",
-        "respect/config": "dev-master",
+        "respect/config": "1.1.*@dev",
         "twig/twig": "1.*"
     },
     "require-dev": {
