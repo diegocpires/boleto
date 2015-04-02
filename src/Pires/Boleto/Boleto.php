@@ -200,10 +200,60 @@ abstract class Boleto {
      */
     protected $cedente;
 
+    /**
+     * @var Twig Componente para o Twig
+     */
     protected $twig;
 
+    /**
+     * @var String Nome do Template do Boleto
+     */
     protected $nome_template;
 
+    /**
+     * @var String Imagem do logotipo do banco
+     */
+    protected $logo_banco;
+
+    /**
+     * @var String Imagem do logotipo da empresa
+     */
+    protected $logo_empresa;
+
+    /**
+     * @var String Imagem Um
+     */
+    protected $imagem_um;
+
+    /**
+     * @var String Imagem Dois
+     */
+    protected $imagem_dois;
+
+    /**
+     * @var String Imagem Três
+     */
+    protected $imagem_tres;
+
+    /**
+     * @var String Imagem Seis
+     */
+    protected $imagem_seis;
+
+    /**
+     * @var String Imagem P
+     */
+    protected $imagem_p;
+
+    /**
+     * @var String Imagem B
+     */
+    protected $imagem_b;
+
+    /**
+     * Construtor da classe
+     * @param \Respect\Config\Container Container com configurações iniciais
+     */
     public function __construct(\Respect\Config\Container $container = null)
     {
         if (is_null($this->twig)) {
@@ -221,6 +271,13 @@ abstract class Boleto {
                 $this->{$chave} = $valor;
             }
         }
+
+        $this->imagem_um = base64_encode(fread(fopen(__DIR__.'/templates/imagens/1.png', 'r'),filesize(__DIR__.'/templates/imagens/1.png')));
+        $this->imagem_dois = base64_encode(fread(fopen(__DIR__.'/templates/imagens/2.png', 'r'),filesize(__DIR__.'/templates/imagens/2.png')));
+        $this->imagem_tres = base64_encode(fread(fopen(__DIR__.'/templates/imagens/3.png', 'r'),filesize(__DIR__.'/templates/imagens/3.png')));
+        $this->imagem_seis = base64_encode(fread(fopen(__DIR__.'/templates/imagens/6.png', 'r'),filesize(__DIR__.'/templates/imagens/6.png')));
+        $this->imagem_p = base64_encode(fread(fopen(__DIR__.'/templates/imagens/p.png', 'r'),filesize(__DIR__.'/templates/imagens/6.png')));
+        $this->imagem_b = base64_encode(fread(fopen(__DIR__.'/templates/imagens/b.png', 'r'),filesize(__DIR__.'/templates/imagens/6.png')));
     }
 
     public function __get($nome)
@@ -265,12 +322,9 @@ abstract class Boleto {
     {
         $nomePropriedade = self::fromCamelCase($nome);
         if(property_exists(self::nomeClasse(), $nomePropriedade)) {
-            // if($argumentos[0] != "")
             $this->{$nomePropriedade} = $argumentos[0];
-            // return $this->{$nomePropriedade} = null;
         } else {
             throw new \Exception("Propriedade ".$nomePropriedade." não existe", 1);
-
         }
         return $this;
     }
@@ -299,7 +353,7 @@ abstract class Boleto {
     protected function geraCodigoBanco()
     {
         $parte1 = substr($this->getCodigoBanco(), 0, 3);
-        $parte2 = $this->getModulo11($parte1);
+        $parte2 = $this->geraModulo11($parte1);
         $this->setCodigoBancoDv($parte1 . "-" . $parte2);
         return $this;
     }
@@ -455,6 +509,28 @@ abstract class Boleto {
         return $this;
     }
 
+    /**
+     * Getter para o valor do boleto
+     * @param boolean Se retornará formatado ou não
+     * @param boolean Se retornará com símbolo da moeda
+     */
+    public function getValorBoleto($formatado = false, $symbol = false)
+    {
+        if(!$formatado) {
+            return $this->valor_boleto;
+        } else {
+            $numero = number_format($this->valor_boleto, 2, ",", ".");
+
+            if($symbol === true) {
+                $numero = "R$ ".$numero;
+            }
+            return $numero;
+        }
+    }
+
+    /**
+     * Função responsável por formatar o valor do boleto
+     */
     private function formataValor($numero, $loop, $insert, $tipo = "geral") 
     {
         if ($tipo == "geral") {
@@ -482,13 +558,108 @@ abstract class Boleto {
         return $numero;
     }
 
-
+    /**
+     * Função responsável por renderizar o boleto para impressão
+     */
     public function imprimeBoleto()
     {
         return $this->twig->render($this->nome_template, array("boleto"=>$this));
     }
 
+    /**
+     * Função responsável gerar a agência para o código de barras
+     */
+    public function getAgenciaCodigoBoleto()
+    {
+        return $this->getAgencia()." / ". $this->getConta()."-".$this->geraModulo10($this->getAgencia().$this->getConta);
+    }
+
+
+    public function esquerda($entra,$comp){
+        return substr($entra,0,$comp);
+    }
+
+    public function direita($entra,$comp){
+        return substr($entra,strlen($entra)-$comp,$comp);
+    }
+
+    /**
+     * Função responsável por gerar a imagem do código de barras
+     */
+    public function generateBarCode()
+    {
+        $fino = 1 ;
+        $largo = 3 ;
+        $altura = 50 ;
+
+        $barcodes[0] = "00110" ;
+        $barcodes[1] = "10001" ;
+        $barcodes[2] = "01001" ;
+        $barcodes[3] = "11000" ;
+        $barcodes[4] = "00101" ;
+        $barcodes[5] = "10100" ;
+        $barcodes[6] = "01100" ;
+        $barcodes[7] = "00011" ;
+        $barcodes[8] = "10010" ;
+        $barcodes[9] = "01010" ;
+
+        for($f1=9;$f1>=0;$f1--){ 
+            for($f2=9;$f2>=0;$f2--){  
+                $f = ($f1 * 10) + $f2 ;
+                $texto = "" ;
+                for($i=1;$i<6;$i++){ 
+                    $texto .=  substr($barcodes[$f1],($i-1),1) . substr($barcodes[$f2],($i-1),1);
+                }
+                $barcodes[$f] = $texto;
+            }
+        }
+
+        $imagem = '<img src="data:image/png;base64, '.$this->getImagemP().'" width="'.$fino.'" height="'.$altura.'" border="0">';
+        $imagem .= '<img src="data:image/png;base64, '.$this->getImagemB().'" width="'.$fino.'" height="'.$altura.'" border="0">';
+        $imagem .= '<img src="data:image/png;base64, '.$this->getImagemP().'" width="'.$fino.'" height="'.$altura.'" border="0">';
+        $imagem .= '<img src="data:image/png;base64, '.$this->getImagemB().'" width="'.$fino.'" height="'.$altura.'" border="0">';
+
+        $texto = $this->getCodigoBarras44();
+        if((strlen($texto) % 2) <> 0){
+            $texto = "0" . $texto;
+        }
+
+        while (strlen($texto) > 0) {
+            $i = round($this->esquerda($texto,2));
+            $texto = $this->direita($texto,strlen($texto)-2);
+            $f = $barcodes[$i];
+            for($i=1;$i<11;$i+=2){
+                if (substr($f,($i-1),1) == "0") {
+                    $f1 = $fino ;
+                }else{
+                    $f1 = $largo ;
+                }
+
+                if (substr($f,$i,1) == "0") {
+                    $f2 = $fino ;
+                }else{
+                    $f2 = $largo ;
+                }
+
+                $imagem .= '<img src="data:image/png;base64, '.$this->getImagemP().'" width="'.$f1.'" height="'.$altura.'" border="0">';
+                $imagem .= '<img src="data:image/png;base64, '.$this->getImagemB().'" width="'.$f2.'" height="'.$altura.'" border="0">';
+            }
+        }
+
+        $imagem .= '<img src="data:image/png;base64, '.$this->getImagemP().'" width="'.$largo.'" height="'.$altura.'" border="0">';
+        $imagem .= '<img src="data:image/png;base64, '.$this->getImagemB().'" width="'.$fino.'" height="'.$altura.'" border="0">';
+        $imagem .= '<img src="data:image/png;base64, '.$this->getImagemP().'" width="1" height="'.$altura.'" border="0">';
+
+        return $imagem;
+    }
+
+    /**
+     * Função abstrata para gerar Dígito Verificador do Código de barras, implementar em casa banco
+     */
     abstract public function calculaDigitoVerificadorCodigoBarras();
 
+    /**
+     * Função abstrata para gerar Linha digitável, implementar em casa banco
+     */
     abstract public function getLinhaDigitavel();
 }

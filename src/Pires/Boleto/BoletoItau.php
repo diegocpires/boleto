@@ -3,12 +3,16 @@ namespace Pires\Boleto;
 
 class BoletoItau extends Boleto {
 
+    
     public function __construct(\Respect\Config\Container $container = null)
     {
         $this->setCodigoBanco(341)
             ->geraCodigoBanco()
             ->setNumeroMoeda(9)
             ->setNomeTemplate('boleto_itau.html.twig');
+
+        $this->logo_banco = base64_encode(fread(fopen(__DIR__.'/templates/imagens/logoitau.jpg', 'r'),filesize(__DIR__.'/templates/imagens/logoitau.jpg')));
+        
 
         parent::__construct($container);
     }
