@@ -5,30 +5,32 @@ class SacadoTest extends PHPUnit_Framework_TestCase
 {
     public function testNome()
     {
-        $cedente = new \Pires\Boleto\Cedente();
-        $cedente->setNome("Diego Pires");
-        $this->assertEquals("Diego Pires", $cedente->getNome());
+        $sacado = new \Pires\Boleto\Sacado();
+        $sacado->setNome("Diego Pires");
+        $this->assertEquals("Diego Pires", $sacado->getNome());
     }
 
     public function testEndereco()
     {
-        $cedente = new \Pires\Boleto\Cedente();
-        $cedente->setEndereco("Endereço Teste");
-        $this->assertEquals("Endereço Teste", $cedente->getEndereco());
+        $sacado = new \Pires\Boleto\Sacado();
+        $sacado->setEndereco("Endereço Teste");
+        $this->assertEquals("Endereço Teste", $sacado->getEndereco());
     }
 
-    public function testConta()
+    public function testEnderecoComplemento()
     {
-        $cedente = new \Pires\Boleto\Cedente();
-        $cedente->setConta("213");
-        $this->assertEquals("213", $cedente->getConta());
+        $sacado = new \Pires\Boleto\Sacado();
+        $sacado->setEnderecoComplemento("Complemento");
+        $this->assertEquals("Complemento", $sacado->getEnderecoComplemento());
     }
 
-    public function testAgencia()
+    /**
+     * @expectedException Exception
+     */
+    public function testGetPropriedadeNaoExiste()
     {
-        $cedente = new \Pires\Boleto\Cedente();
-        $cedente->setAgencia("0123");
-        $this->assertEquals("0123", $cedente->getAgencia());
+        $sacado = new \Pires\Boleto\Sacado();
+        $sacado->getQualquerCoisa();
     }
 
 }

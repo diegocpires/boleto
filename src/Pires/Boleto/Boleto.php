@@ -370,29 +370,72 @@ abstract class Boleto extends BaseClass {
                     $day +  1721119);
     }
 
-    public function geraCodigoBarras()
+    private function verificaCodigoBanco()
     {
         if(is_null($this->getCodigoBanco())) {
             throw new \InvalidArgumentException("Código do Banco não informado", 1);
         }
+        return $this;
+    }
+
+    private function verificaNumeroMoeda()
+    {
         if(is_null($this->getNumeroMoeda())) {
             throw new \InvalidArgumentException("Número da Moeda não informado", 1);
         }
+        return $this;
+    }
+
+    private function verificaValorBoleto()
+    {
         if(is_null($this->getValorBoleto())) {
             throw new \InvalidArgumentException("Valor do Boleto não informado", 1);
         }
+        return $this;
+    }
+
+    private function verificaCarteira()
+    {
         if(is_null($this->getCarteira())) {
             throw new \InvalidArgumentException("Valor do Boleto não informado", 1);
         }
+        return $this;
+    }
+
+    private function verificaNossoNumero()
+    {
         if(is_null($this->getNossoNumero())) {
             throw new \InvalidArgumentException("Nosso Número não informado", 1);
         }
+        return $this;
+    }
+
+    private function verificaAgencia()
+    {
         if(is_null($this->getCedente()->getAgencia())) {
             throw new \InvalidArgumentException("Agência não informada", 1);
         }
+        return $this;
+    }
+
+    private function verificaConta()
+    {
         if(is_null($this->getCedente()->getConta())) {
             throw new \InvalidArgumentException("Conta não informada", 1);
         }
+        return $this;
+    }
+
+    public function geraCodigoBarras()
+    {
+        $this
+            ->verificaCodigoBanco()
+            ->verificaNumeroMoeda()
+            ->verificaValorBoleto()
+            ->verificaCarteira()
+            ->verificaNossoNumero()
+            ->verificaAgencia()
+            ->verificaConta();
 
         $codigo_barras = $this->getCodigoBanco();
         $codigo_barras .= $this->getNumeroMoeda();
@@ -447,8 +490,7 @@ abstract class Boleto extends BaseClass {
             while(strlen($numero)<$loop){
                 $numero = $insert . $numero;
             }
-        }
-        if ($tipo == "valor") {
+        } else if ($tipo == "valor") {
             /*
                 retira as virgulas formata o numero preenche com zeros
             */
@@ -457,8 +499,7 @@ abstract class Boleto extends BaseClass {
             while(strlen($numero)<$loop){
                 $numero = $insert . $numero;
             }
-        }
-        if ($tipo == "convenio") {
+        } else if ($tipo == "convenio") {
             while(strlen($numero)<$loop){
                 $numero = $numero . $insert;
             }

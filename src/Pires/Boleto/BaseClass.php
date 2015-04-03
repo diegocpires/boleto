@@ -1,22 +1,19 @@
 <?php
 namespace Pires\Boleto;
 
+/**
+ * Class básica para definir getter's e setter's
+ * @author Diego Pires <diegocpires@gmail.com>
+ */
 class BaseClass {
 
-    public function __get($nome)
-    {
-        if (property_exists(self::nomeClasse(), $nome)) {
-            return $this->getMagico($nome);
-        }
-
-        return null;
-    }
-
-    public function __set($name, $value)
-    {
-        $this->$name = $value;
-    }
-
+    /**
+     * Metodo mágico para criar os getter's e setter's
+     * @param String Nome do método chamado
+     * @param Array Argumentos
+     * @throws Exception Caso não exista o atributo
+     * @author Diego Pires <diegocpires@gmail.com>
+     */
     public function __call($nome, $argumentos)
     {
         if(substr($nome, 0, 3) == "get")
@@ -31,24 +28,40 @@ class BaseClass {
         }
 
         throw new \Exception("Método $nome não existe", 1);
-
     }
 
+    /**
+     * Função para recuperar automaticamente atributos da classe
+     * @param String Nome do atributo
+     * @return 
+     * @throws Exception Caso não exista o atributo
+     * @author Diego Pires <diegocpires@gmail.com>
+     */
     public function getMagico($nome, $argumentos = array())
     {
         $nomePropriedade = self::fromCamelCase($nome);
         if(property_exists(self::nomeClasse(), $nomePropriedade)) {
             return $this->{$nomePropriedade};
+        } else {
+            throw new \Exception("Atributo ".$nomePropriedade." não existe", 1);
         }
     }
 
+    /**
+     * Função para setar automaticamente atributos da classe
+     * @param String Nome da atributo
+     * @param  Valor a ser setado
+     * @return Class 
+     * @throws Exception Caso não exista o atributo
+     * @author Diego Pires <diegocpires@gmail.com>
+     */
     public function setMagico($nome, $argumentos)
     {
         $nomePropriedade = self::fromCamelCase($nome);
         if(property_exists(self::nomeClasse(), $nomePropriedade)) {
             $this->{$nomePropriedade} = $argumentos[0];
         } else {
-            throw new \Exception("Propriedade ".$nomePropriedade." não existe", 1);
+            throw new \Exception("Atributo ".$nomePropriedade." não existe", 1);
         }
         return $this;
     }
@@ -56,7 +69,7 @@ class BaseClass {
     /**
      * Função para retornar o nome da classe
      * @return String Nome da Classe
-     * @author Diego Pires <diego.pires@procorpoestetica.com.br>
+     * @author Diego Pires <diegocpires@gmail.com>
      */
     public static function nomeClasse() {
         return get_called_class();
@@ -67,7 +80,7 @@ class BaseClass {
      * @param  String Valor a ser convertido
      * @param  String Separador a ser utilizado
      * @return String Valor convertido
-     * @author Diego Pires <diego.pires@procorpoestetica.com.br>
+     * @author Diego Pires <diegocpires@gmail.com>
      */
     public static function fromCamelCase($valor,$separador="_")
     {
