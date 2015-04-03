@@ -521,7 +521,7 @@ abstract class Boleto extends BaseClass {
      */
     public function getAgenciaCodigoBoleto()
     {
-        return $this->getCedente()->getAgencia()." / ". $this->getCedente()->getConta()."-".$this->geraModulo10($this->getCedente()->getAgencia().$this->getCedente()->getConta);
+        return $this->getCedente()->getAgencia()." / ". $this->getCedente()->getConta()."-".$this->geraModulo10($this->getCedente()->getAgencia().$this->getCedente()->getConta());
     }
 
 

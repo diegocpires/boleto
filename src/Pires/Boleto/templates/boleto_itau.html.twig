@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.0 Transitional//EN'>
 <html>
   <head>
-    <title>{{boleto.getIdentificacao()|raw}}</title>
+    <title>{{boleto.getCedente().getNome()|raw}}</title>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <style type="text/css">
       .cp {  font: bold 10px Arial; color: black}
@@ -66,10 +66,10 @@
     <table width="666" cellspacing="5" cellpadding="0" border="0" align=Default>
       <tr>
         <td width="41"><img src="{{boleto.getCedente().getLogo()|raw}}"></td>
-        <td class="ti" width=455>{{boleto.getIdentificacao()|raw}} <br />
-          {{boleto.getCpfCnpj()|raw}}<br />
-          {{boleto.getEndereco()|raw}}<br />
-          {{boleto.getCidadeUf()|raw}}<br />
+        <td class="ti" width=455>{{boleto.getCedente().getNome()|raw}} <br />
+          {{boleto.getCedente().getCpfCnpj()|raw}}<br />
+          {{boleto.getCedente().getEndereco()|raw}}<br />
+          {{boleto.getCedente().getCidadeUf()|raw}}<br />
         </td>
         <td align="right" width="150" class="ti">&nbsp;</td>
       </tr>
@@ -233,7 +233,7 @@
           </td>
           <td class="cp" valign="top" width="132" height="12">
             <span class="campo">
-              {{boleto.getCpfCnpj()|raw}}
+              {{boleto.getCedente().getCpfCnpj()|raw}}
             </span>
           </td>
           <td class="cp" valign="top" width="7" height="12">
