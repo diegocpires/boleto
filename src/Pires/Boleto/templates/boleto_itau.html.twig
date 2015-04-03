@@ -871,10 +871,10 @@
             <br /><br />
             <span class="cp"> 
               <font class="campo">
-                <?php echo $dadosboleto["instrucoes1"]; ?><br />
-                <?php echo $dadosboleto["instrucoes2"]; ?><br />
-                <?php echo $dadosboleto["instrucoes3"]; ?><br />
-                <?php echo $dadosboleto["instrucoes4"]; ?>
+                {{boleto.getInstrucao1()|raw}}<br />
+                {{boleto.getInstrucao2()|raw}}<br />
+                {{boleto.getInstrucao3()|raw}}<br />
+                {{boleto.getInstrucao4()|raw}}
               </font><br /><br />
             </span>
           </td>

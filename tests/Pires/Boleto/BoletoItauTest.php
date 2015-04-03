@@ -15,6 +15,30 @@ class BoletoItauTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(9, $boletoItau->getNumeroMoeda());
     }
 
+    public function testInstrucoes()
+    {
+        $boletoItau = new \Pires\Boleto\BoletoItau();
+        $boletoItau->setInstrucao1('1');
+        $boletoItau->setInstrucao2('2');
+        $boletoItau->setInstrucao3('3');
+        $boletoItau->setInstrucao4('4');
+        $this->assertEquals('1', $boletoItau->getInstrucao1());
+        $this->assertEquals('2', $boletoItau->getInstrucao2());
+        $this->assertEquals('3', $boletoItau->getInstrucao3());
+        $this->assertEquals('4', $boletoItau->getInstrucao4());
+    }
+
+    public function testObservacoes()
+    {
+        $boletoItau = new \Pires\Boleto\BoletoItau();
+        $boletoItau->setObservacao1('1');
+        $boletoItau->setObservacao2('2');
+        $boletoItau->setObservacao3('3');
+        $this->assertEquals('1', $boletoItau->getObservacao1());
+        $this->assertEquals('2', $boletoItau->getObservacao2());
+        $this->assertEquals('3', $boletoItau->getObservacao3());
+    }
+
     public function testFatorVencimento()
     {
         $boletoItau = new \Pires\Boleto\BoletoItau();

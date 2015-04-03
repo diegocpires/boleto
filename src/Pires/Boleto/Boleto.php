@@ -6,10 +6,17 @@ namespace Pires\Boleto;
  * @method string getCodigoBarras()
  * @method int getCodigoBanco()
  * @method int getCodigoBancoDv()
- * @method string getFatorVencimento()
  * @method string getCodigoBarrasDv()
  * @method string getCodigoBarras44()
  * @method Boleto setCodigoBarras44(string $string)
+ * @method Boleto setInstrucao1(string $string)
+ * @method Boleto setInstrucao2(string $string)
+ * @method Boleto setInstrucao3(string $string)
+ * @method Boleto setInstrucao4(string $string)
+ * @method string getInstrucao1()
+ * @method string getInstrucao2()
+ * @method string getInstrucao3()
+ * @method string getInstrucao4()
  * @method string getCarteira()
  * @method string getNossoNumero()
  * @method int getNumeroMoeda()
@@ -31,11 +38,6 @@ abstract class Boleto extends BaseClass {
      * @var String Código do Banco com DV
      */
     protected $codigo_banco_dv;
-
-    /**
-     * @var String Fator Vencimento
-     */
-    private $fator_vencimento;
 
     /**
      * @var String Código de Barras

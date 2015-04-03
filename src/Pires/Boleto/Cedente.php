@@ -16,11 +16,6 @@ class Cedente extends BaseClass {
     protected $endereco;
 
     /**
-     * @var string Complemento do endereço do Sacado
-     */
-    protected $endereco_complemento;
-
-    /**
      * @var string Path para o logo da empresa
      */
     protected $logo;
@@ -73,6 +68,18 @@ class Cedente extends BaseClass {
     public function setLogo($logo)
     {
         $this->logo = $logo;
+        return $this;
+    }
+
+    public function setCpfCnpj($documento)
+    {
+        $this->cpf_cnpj = $documento;
+        return $this;
+    }
+
+    public function setCidadeUf($cidade_uf)
+    {
+        $this->cidade_uf = $cidade_uf;
         return $this;
     }
 
