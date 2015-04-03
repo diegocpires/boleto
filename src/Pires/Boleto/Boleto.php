@@ -6,6 +6,7 @@ namespace Pires\Boleto;
  * @method string getCodigoBarras()
  * @method int getCodigoBanco()
  * @method int getCodigoBancoDv()
+ * @method Boleto setCodigoBarrasDv()
  * @method string getCodigoBarrasDv()
  * @method string getCodigoBarras44()
  * @method Boleto setCodigoBarras44(string $string)

@@ -38,6 +38,20 @@ class CedenteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("00432", $cedente->getConta());
     }
 
+    public function testCpfCnpj()
+    {
+        $cedente = new \Pires\Boleto\Cedente();
+        $cedente->setCpfCnpj("12345678954");
+        $this->assertEquals("12345678954", $cedente->getCpfCnpj());
+    }
+
+    public function testCidadeUf()
+    {
+        $cedente = new \Pires\Boleto\Cedente();
+        $cedente->setCidadeUf("São Paulo - SP");
+        $this->assertEquals("São Paulo - SP", $cedente->getCidadeUf());
+    }
+
     /**
      * @expectedException Exception
      */

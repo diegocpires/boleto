@@ -2,7 +2,10 @@
 namespace Pires\Boleto;
 
 /**
- * Classe base para geração de boletos bancários
+ * Classe para o Sacado
+ * @method string getEndereco()
+ * @method string getNome()
+ * @method string getEnderecoComplemento()
  */
 class Sacado extends BaseClass {
     /**

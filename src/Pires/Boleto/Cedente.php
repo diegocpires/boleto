@@ -2,7 +2,14 @@
 namespace Pires\Boleto;
 
 /**
- * Classe base para geração de boletos bancários
+ * Classe para o Cedente
+ * @method string getAgencia()
+ * @method string getConta()
+ * @method string getEndereco()
+ * @method string getLogo()
+ * @method string getNome()
+ * @method string getCpfCnpj()
+ * @method string getCidadeUf()
  */
 class Cedente extends BaseClass {
     /**
