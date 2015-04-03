@@ -30,7 +30,7 @@ class BaseClass {
             return $this->setMagico($nomePropriedade, $argumentos);
         }
 
-        throw new \Exception("Método $nome na entidade $this->nomeEntidade não existe", 1);
+        throw new \Exception("Método $nome não existe", 1);
 
     }
 

@@ -18,6 +18,8 @@ namespace Pires\Boleto;
  * @method string getInstrucao3()
  * @method string getInstrucao4()
  * @method string getCarteira()
+ * @method \Pires\Boleto\Cedente getCedente()
+ * @method Boleto setCodigoBarras(string $string)
  * @method string getNossoNumero()
  * @method int getNumeroMoeda()
  * @method int getPrazoPagamento()
