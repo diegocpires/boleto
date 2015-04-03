@@ -65,7 +65,7 @@
     </table>
     <table width="666" cellspacing="5" cellpadding="0" border="0" align=Default>
       <tr>
-        <td width="41"><img src="{{boleto.getLogoEmpresa()|raw}}"></td>
+        <td width="41"><img src="{{boleto.getCedente().getLogo()|raw}}"></td>
         <td class="ti" width=455>{{boleto.getIdentificacao()|raw}} <br />
           {{boleto.getCpfCnpj()|raw}}<br />
           {{boleto.getEndereco()|raw}}<br />
@@ -137,7 +137,7 @@
             <img height="12" src="data:image/png;base64, {{boleto.getImagemUm()|raw}}" width="1" border="0">
           </td>
           <td class="cp" valign="top" width="298" height="12">
-            <span class="campo">{{boleto.getCedente()|raw}}</span>
+            <span class="campo">{{boleto.getCedente().getNome()|raw}}</span>
           </td>
           <td class="cp" valign="top" width="7" height="12">
             <img height="12" src="data:image/png;base64, {{boleto.getImagemUm()|raw}}" width="1" border="0">
@@ -388,7 +388,7 @@
           </td>
           <td class="cp" valign="top" width="659" height="12">
             <span class="campo">
-              {{boleto.getSacado()|raw}}
+              {{boleto.getSacado().getNome()|raw}}
             </span>
           </td>
         </tr>
@@ -555,7 +555,7 @@
             <img height="12" src="data:image/png;base64, {{boleto.getImagemUm()|raw}}" width="1" border="0">
           </td>
           <td class="cp" valign="top" width="472" height="12">
-            <span class="campo">{{boleto.getCedente()|raw}}</span>
+            <span class="campo">{{boleto.getCedente().getNome()|raw}}</span>
           </td>
           <td class="cp" valign="top" width="7" height="12">
             <img height="12" src="data:image/png;base64, {{boleto.getImagemUm()|raw}}" width="1" border="0">
@@ -871,10 +871,10 @@
             <br /><br />
             <span class="cp"> 
               <font class="campo">
-                <?php echo $dadosboleto["instrucoes1"]; ?><br />
-                <?php echo $dadosboleto["instrucoes2"]; ?><br />
-                <?php echo $dadosboleto["instrucoes3"]; ?><br />
-                <?php echo $dadosboleto["instrucoes4"]; ?>
+                {{boleto.getInstrucao1()|raw}}<br />
+                {{boleto.getInstrucao2()|raw}}<br />
+                {{boleto.getInstrucao3()|raw}}<br />
+                {{boleto.getInstrucao4()|raw}}
               </font><br /><br />
             </span>
           </td>
@@ -1116,7 +1116,7 @@
           </td>
           <td class="cp" valign="top" width="659" height="12">
             <span class="campo">
-              {{boleto.getSacado()|raw}}
+              {{boleto.getSacado().getNome()|raw}}
             </span>
           </td>
         </tr>
@@ -1131,7 +1131,7 @@
           </td>
           <td class="cp" valign="top" width="659" height="12">
             <span class="campo">
-              {{boleto.getEnderecoSacado()|raw}}
+              {{boleto.getSacado().getEndereco()|raw}}
             </span>
           </td>
         </tr>
@@ -1146,7 +1146,7 @@
           </td>
           <td class="cp" valign="top" width="472" height="13">
             <span class="campo">
-              {{boleto.getEnderecoComplementoSacado()|raw}}
+              {{boleto.getSacado().getEnderecoComplemento()|raw}}
             </span>
           </td>
           <td class="ct" valign="top" width="7" height="13">

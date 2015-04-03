@@ -1,7 +1,33 @@
 <?php
 namespace Pires\Boleto;
 
-abstract class Boleto {
+/**
+ * Classe base para geração de boletos bancários
+ * @method string getCodigoBarras()
+ * @method int getCodigoBanco()
+ * @method int getCodigoBancoDv()
+ * @method string getCodigoBarrasDv()
+ * @method string getCodigoBarras44()
+ * @method Boleto setCodigoBarras44(string $string)
+ * @method Boleto setInstrucao1(string $string)
+ * @method Boleto setInstrucao2(string $string)
+ * @method Boleto setInstrucao3(string $string)
+ * @method Boleto setInstrucao4(string $string)
+ * @method string getInstrucao1()
+ * @method string getInstrucao2()
+ * @method string getInstrucao3()
+ * @method string getInstrucao4()
+ * @method string getCarteira()
+ * @method \Pires\Boleto\Cedente getCedente()
+ * @method Boleto setCodigoBarras(string $string)
+ * @method string getNossoNumero()
+ * @method int getNumeroMoeda()
+ * @method int getPrazoPagamento()
+ * @method float getTaxaEmissao()
+ * @method \DateTime getDataVencimento()
+ * @method \DateTime getDataEmissao()
+ */
+abstract class Boleto extends BaseClass {
 
     const DIR_TEMPLATE = __DIR__;
 
@@ -14,11 +40,6 @@ abstract class Boleto {
      * @var String Código do Banco com DV
      */
     protected $codigo_banco_dv;
-
-    /**
-     * @var String Fator Vencimento
-     */
-    private $fator_vencimento;
 
     /**
      * @var String Código de Barras
@@ -81,19 +102,9 @@ abstract class Boleto {
     protected $numero_documento;
 
     /**
-     * @var String Nome do Sacado
+     * @var \Pires\Boleto\Sacado Sacado
      */
     protected $sacado;
-
-    /**
-     * @var String Endereço do Sacado
-     */
-    protected $endereco_sacado;
-
-    /**
-     * @var String Complemento do endereço do Sacado
-     */
-    protected $endereco_complemento_sacado;
 
     /**
      * @var String Linha 1 da Observação
@@ -156,16 +167,6 @@ abstract class Boleto {
     protected $especie_doc;
 
     /**
-     * @var String Agência
-     */
-    protected $agencia;
-
-    /**
-     * @var String Conta
-     */
-    protected $conta;
-
-    /**
      * @var String Dígito Verificador
      */
     protected $conta_dv;
@@ -176,27 +177,7 @@ abstract class Boleto {
     protected $carteira;
 
     /**
-     * @var String Identificação Empresa
-     */
-    protected $identificacao;
-
-    /**
-     * @var String CPF - CNPJ
-     */
-    protected $cpf_cnpj;
-
-    /**
-     * @var String Endereço
-     */
-    protected $endereco;
-
-    /**
-     * @var String Cidade / UF
-     */
-    protected $cidade_uf;
-
-    /**
-     * @var String Cedente
+     * @var \Pires\Boleto\Cedente
      */
     protected $cedente;
 
@@ -214,11 +195,6 @@ abstract class Boleto {
      * @var String Imagem do logotipo do banco
      */
     protected $logo_banco;
-
-    /**
-     * @var String Imagem do logotipo da empresa
-     */
-    protected $logo_empresa;
 
     /**
      * @var String Imagem Um
@@ -280,75 +256,7 @@ abstract class Boleto {
         $this->imagem_b = base64_encode(fread(fopen(__DIR__.'/templates/imagens/b.png', 'r'),filesize(__DIR__.'/templates/imagens/6.png')));
     }
 
-    public function __get($nome)
-    {
-        if (property_exists(self::nomeClasse(), $nome)) {
-            return $this->getMagico($nome);
-        }
 
-        return null;
-    }
-
-    public function __set($name, $value)
-    {
-        $this->$name = $value;
-    }
-
-    public function __call($nome, $argumentos)
-    {
-        if(substr($nome, 0, 3) == "get")
-        {
-            $nomePropriedade = substr($nome, 3);
-            return $this->getMagico($nomePropriedade, $argumentos);
-        }
-        if(substr($nome, 0, 3) == "set")
-        {
-            $nomePropriedade = substr($nome, 3);
-            return $this->setMagico($nomePropriedade, $argumentos);
-        }
-
-        throw new \Exception("Método $nome na entidade $this->nomeEntidade não existe", 1);
-
-    }
-
-    protected function getMagico($nome, $argumentos = array())
-    {
-        $nomePropriedade = self::fromCamelCase($nome);
-        if(property_exists(self::nomeClasse(), $nomePropriedade)) {
-            return $this->{$nomePropriedade};
-        }
-    }
-    protected function setMagico($nome, $argumentos)
-    {
-        $nomePropriedade = self::fromCamelCase($nome);
-        if(property_exists(self::nomeClasse(), $nomePropriedade)) {
-            $this->{$nomePropriedade} = $argumentos[0];
-        } else {
-            throw new \Exception("Propriedade ".$nomePropriedade." não existe", 1);
-        }
-        return $this;
-    }
-
-    /**
-     * Função para retornar o nome da classe
-     * @return String Nome da Classe
-     * @author Diego Pires <diego.pires@procorpoestetica.com.br>
-     */
-    public static function nomeClasse() {
-        return get_called_class();
-    }
-
-    /**
-     * Função responsável por converter camel case em underline
-     * @param  String Valor a ser convertido
-     * @param  String Separador a ser utilizado
-     * @return String Valor convertido
-     * @author Diego Pires <diego.pires@procorpoestetica.com.br>
-     */
-    public static function fromCamelCase($valor,$separador="_")
-    {
-        return strtolower(preg_replace('/(?!^)[[:upper:]][[:lower:]]/', '$0', preg_replace('/(?!^)[[:upper:]]+/', $separador.'$0', $valor)));
-    }
 
     protected function geraCodigoBanco()
     {
@@ -462,29 +370,72 @@ abstract class Boleto {
                     $day +  1721119);
     }
 
-    public function geraCodigoBarras()
+    private function verificaCodigoBanco()
     {
         if(is_null($this->getCodigoBanco())) {
             throw new \InvalidArgumentException("Código do Banco não informado", 1);
         }
+        return $this;
+    }
+
+    private function verificaNumeroMoeda()
+    {
         if(is_null($this->getNumeroMoeda())) {
             throw new \InvalidArgumentException("Número da Moeda não informado", 1);
         }
+        return $this;
+    }
+
+    private function verificaValorBoleto()
+    {
         if(is_null($this->getValorBoleto())) {
             throw new \InvalidArgumentException("Valor do Boleto não informado", 1);
         }
+        return $this;
+    }
+
+    private function verificaCarteira()
+    {
         if(is_null($this->getCarteira())) {
             throw new \InvalidArgumentException("Valor do Boleto não informado", 1);
         }
+        return $this;
+    }
+
+    private function verificaNossoNumero()
+    {
         if(is_null($this->getNossoNumero())) {
             throw new \InvalidArgumentException("Nosso Número não informado", 1);
         }
-        if(is_null($this->getAgencia())) {
+        return $this;
+    }
+
+    private function verificaAgencia()
+    {
+        if(is_null($this->getCedente()->getAgencia())) {
             throw new \InvalidArgumentException("Agência não informada", 1);
         }
-        if(is_null($this->getConta())) {
+        return $this;
+    }
+
+    private function verificaConta()
+    {
+        if(is_null($this->getCedente()->getConta())) {
             throw new \InvalidArgumentException("Conta não informada", 1);
         }
+        return $this;
+    }
+
+    public function geraCodigoBarras()
+    {
+        $this
+            ->verificaCodigoBanco()
+            ->verificaNumeroMoeda()
+            ->verificaValorBoleto()
+            ->verificaCarteira()
+            ->verificaNossoNumero()
+            ->verificaAgencia()
+            ->verificaConta();
 
         $codigo_barras = $this->getCodigoBanco();
         $codigo_barras .= $this->getNumeroMoeda();
@@ -493,13 +444,13 @@ abstract class Boleto {
         $codigo_barras .= $this->getCarteira();
         $codigo_barras .= $this->formataValor($this->getNossoNumero(),8,0);
         $codigo_barras .= $this->geraModulo10(
-            $this->getAgencia().$this->getConta().$this->getCarteira().
+            $this->getCedente()->getAgencia().$this->getCedente()->getConta().$this->getCarteira().
             $this->formataValor($this->getNossoNumero(),8,0)
         );
-        $codigo_barras .= $this->getAgencia();
-        $codigo_barras .= $this->getConta();
+        $codigo_barras .= $this->getCedente()->getAgencia();
+        $codigo_barras .= $this->getCedente()->getConta();
         $codigo_barras .= $this->geraModulo10(
-            $this->getAgencia().$this->getConta()
+            $this->getCedente()->getAgencia().$this->getCedente()->getConta()
         );
         $codigo_barras .= '000';
 
@@ -539,8 +490,7 @@ abstract class Boleto {
             while(strlen($numero)<$loop){
                 $numero = $insert . $numero;
             }
-        }
-        if ($tipo == "valor") {
+        } else if ($tipo == "valor") {
             /*
                 retira as virgulas formata o numero preenche com zeros
             */
@@ -549,8 +499,7 @@ abstract class Boleto {
             while(strlen($numero)<$loop){
                 $numero = $insert . $numero;
             }
-        }
-        if ($tipo == "convenio") {
+        } else if ($tipo == "convenio") {
             while(strlen($numero)<$loop){
                 $numero = $numero . $insert;
             }
@@ -571,7 +520,7 @@ abstract class Boleto {
      */
     public function getAgenciaCodigoBoleto()
     {
-        return $this->getAgencia()." / ". $this->getConta()."-".$this->geraModulo10($this->getAgencia().$this->getConta);
+        return $this->getCedente()->getAgencia()." / ". $this->getCedente()->getConta()."-".$this->geraModulo10($this->getCedente()->getAgencia().$this->getCedente()->getConta);
     }
 
 
